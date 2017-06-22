@@ -6,6 +6,7 @@
 | :--   | :-- | :-- |
 | 马季   | 0.1   | 初稿 |
 | 马季   | 0.2   | 增加典型案例说明、发布流程能内容|
+| 马季   | 0.3   | 增加团队内部服务器上360fireline和Infer的使用说明, 见第三节|
 
 ## 1. 静态扫描流程
 
@@ -19,13 +20,13 @@
 
 以下主要针对支付控件PluginBase模块的扫描结果进行案例分析，涵盖内容如下:
 
-- [空指针]空指针引用
-- [内存泄露]Stream资源关闭
-- [性能]使用indexOf(字符)
-- [兼容]系统API兼容性隐患
-- [越界]数组下标越界隐患
+- [空指针] 空指针引用
+- [内存泄露] Stream资源关闭
+- [性能] 使用indexOf(字符)
+- [兼容] 系统API兼容性隐患
+- [越界] 数组下标越界隐患
 - [异常] 使用除法或求余没有判断分母长度隐患
-- [SQL]注入风险
+- [SQL] 注入风险
 - [应用安全] AndroidMannifest.xml文件中allowBackup设置为true时会导致数据泄露
 
 更多的错误检查示例请查看各检查工具的检查规则说明文档。
@@ -200,8 +201,8 @@ getDefaultAdapter方法不支持:10(android2.3.3) 以下的版本。
 ```java
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD_MR1) {
        // 包含新API的代码块
-else
-{
+}
+else{
 // 包含旧的API的代码块
 }
 ```
@@ -278,10 +279,6 @@ long newRowId = sqLiteStatement.executeInsert();
 ```
 
 #### 1.2.7 [应用安全] AndroidMannifest.xml文件中allowBackup设置为true时会导致数据泄露
-
-描述：建议将AndroidMannifest.xml文件android:allowBackup属性设置为false。当allowBackup标志值为true时，攻击者可通过adb backup和adb restore来备份和恢复应用程序数据。
-
-推荐写法：
 
 描述：建议将AndroidMannifest.xml文件android:allowBackup属性设置为false。当allowBackup标志值为true时，攻击者可通过adb backup和adb restore来备份和恢复应用程序数据。
 
@@ -484,7 +481,7 @@ PluginBase/src/com/unionpay/mobile/android/upviews/UPRuleView.java:402: error: N
     [https://infer.liaohuqiu.net/docs/getting-started.html](https://infer.liaohuqiu.net/docs/getting-started.html)
 - 使用方法
 
-```cmd
+```shell
 cd {项目的根目录}
 ./gradlew clean
 infer -- ./gradlew build
@@ -498,3 +495,77 @@ infer -- ./gradlew build
 - [http://blog.csdn.net/itfootball/article/details/46474235](http://blog.csdn.net/itfootball/article/details/46474235)
 - [https://github.com/facebook/infer/blob/master/INSTALL.md](https://github.com/facebook/infer/blob/master/INSTALL.md)
 - [https://github.com/facebook/infer/releases](https://github.com/facebook/infer/releases)
+
+## 3. 团队内部服务器使用说明
+
+### 3.1 服务器地址
+
+```shell
+172.18.64.228
+```
+
+### 3.2 工具所在目录
+
+```shell
+/home/ydzf/static_analysis_tool
+```
+
+### 3.3 已安装工具
+
+#### 3.3.1 360 FireLine
+
+##### 安装内容
+
+jar包，访问路径：`/home/ydzf/static_analysis_tool/360fireline/fireline.jar`)
+
+##### 使用方法
+
+```shell
+java -jar {fireline.jar访问路径} -s={项目根目录} -r={报告生成路径}
+
+参数解释：
+【必填项】-s或scanSrcDir为被扫描的项目工程路径
+【必填项】-r或reportSaveDir为火线报告输出路径
+【注意】火线报告输出路径必须是已经存在的可访问的路径，不支持动态生成路径
+```
+
+##### 示例
+
+在`/home/ydzf/orkspace/maji/branch0224/PluginBase`是Android工程的根目录
+
+1. 生成报告存放的文件路径`home/ydzf/workspace/maji/branch0224/FireLineReport`
+1. 在任意路径下执行
+
+```shell
+java -jar /home/ydzf/static_analysis_tool/360fireline/fireline.jar  -s=/home/ydzf/workspace/maji/branch0224/PluginBase -r=/home/ydzf/workspace/maji/branch0224/FireLineReport
+```
+
+#### 3.3.2 Infer
+
+##### 安装内容
+
+Infer源码工程及其依赖，访问路径：`/home/ydzf/static_analysis_tool/infer-master`)
+依赖如下:
+
+* m4-1.4.18
+* autoconf-2.69
+* automake-1.15
+* ocaml-4.02.3
+
+##### 使用方法
+
+```shell
+cd {项目的根目录}
+./gradlew clean
+infer -- ./gradlew build
+```
+
+##### 示例
+
+在`/home/ydzf/orkspace/maji/branch0224/PluginBase`是Android工程的根目录
+
+```shell
+cd home/ydzf/workspace/maji/branch0224/PluginBase
+./gradlew clean
+infer -- ./gradlew build
+```
