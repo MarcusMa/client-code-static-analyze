@@ -6,7 +6,7 @@
 | :--   | :-- | :-- |
 | 马季   | 0.1   | 初稿 |
 | 马季   | 0.2   | 增加典型案例说明、发布流程能内容|
-| 马季   | 0.3   | 增加团队内部服务器上360fireline和Infer的使用说明, 见第三节|
+| 马季   | 0.3   | 增加团队内部服务器上360fireline使用说明, 见第三节；增加疑问解答专区 |
 
 ## 1. 静态扫描流程
 
@@ -542,30 +542,8 @@ java -jar /home/ydzf/static_analysis_tool/360fireline/fireline.jar  -s=/home/ydz
 
 #### 3.3.2 Infer
 
-##### 安装内容
+进行中...
 
-Infer源码工程及其依赖，访问路径：`/home/ydzf/static_analysis_tool/infer-master`)
-依赖如下:
+## 4. 疑问解答
 
-* m4-1.4.18
-* autoconf-2.69
-* automake-1.15
-* ocaml-4.02.3
-
-##### 使用方法
-
-```shell
-cd {项目的根目录}
-./gradlew clean
-infer -- ./gradlew build
-```
-
-##### 示例
-
-在`/home/ydzf/orkspace/maji/branch0224/PluginBase`是Android工程的根目录
-
-```shell
-cd home/ydzf/workspace/maji/branch0224/PluginBase
-./gradlew clean
-infer -- ./gradlew build
-```
+### 4.1 Android Studio 按照教程安装完Godeyes后扫描项目发现没有得到的报告灭有任何错误，说明项目没有任何问题么？
